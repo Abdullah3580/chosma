@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const category = searchParams.get('category')
   const offer = searchParams.get('offer')
 
-  const supabase = createClient()
+  const supabase = await createClient()
   let query = supabase.from('products').select('*').eq('in_stock', true)
 
   if (category && category !== 'all') query = query.eq('category', category)

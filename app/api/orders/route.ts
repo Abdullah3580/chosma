@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Insert one order row per cart item
     const orderRows = items.map((item: {
