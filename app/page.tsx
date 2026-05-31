@@ -9,7 +9,7 @@ import { Ticker } from '@/components/layout/Ticker'
 export const revalidate = 60
 
 export default async function HomePage() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const [{ data: featured }, { data: newArrivals }, { data: eyeglasses }, { data: sunglasses }, { data: designer }] =
     await Promise.all([
