@@ -18,7 +18,7 @@ export default async function ShopPage({
 }: {
   searchParams: Promise<{ category?: string; offer?: string }>
 }) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const params = await searchParams
   const category = params.category ?? 'all'
   const offerOnly = params.offer === 'true'
