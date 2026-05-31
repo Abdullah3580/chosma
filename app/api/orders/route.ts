@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { customer_name, customer_phone, customer_address, district, note, items, total_amount } = body
+    const { customer_name, customer_phone, customer_address, district, note, items } = body
 
     if (!customer_name || !customer_phone || !customer_address || !district || !items?.length) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
 
     const supabase = await createClient()
 
-    // Insert one order row per cart item
     const orderRows = items.map((item: {
       product_id: string
       product_name: string
@@ -50,7 +49,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const phone = searchParams.get('phone')
 
-  const supabase = createClient()
+  const supabase = await createClient()
   let query = supabase.from('orders').select('*').order('created_at', { ascending: false })
   if (phone) query = query.eq('customer_phone', phone)
   else query = query.limit(100)
