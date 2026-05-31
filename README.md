@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # চশমা.com — Chosma
 
 বাংলাদেশের প্রিমিয়াম আইওয়্যার ড্রপশিপিং ওয়েবসাইট।
@@ -180,3 +181,6 @@ VALUES ('Product Name', 'পণ্যের নাম', 'unique-slug', 'sunglass
 ## 📞 Support
 
 কোনো সমস্যায়: info@chosma.com
+=======
+# chosma
+>>>>>>> 95e4706f0f9d9eedb643db867c71427342aeb905
