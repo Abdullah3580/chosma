@@ -20,8 +20,9 @@ export default function LoginPage() {
       setError('ভুল ইমেইল বা পাসওয়ার্ড')
       setLoading(false)
     } else {
-      router.push('/account')
       router.refresh()
+      window.location.href = '/account'
+      
     }
   }
 
