@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # চশমা.com — Chosma
 
 বাংলাদেশের প্রিমিয়াম আইওয়্যার ড্রপশিপিং ওয়েবসাইট।
@@ -16,7 +15,7 @@ cd chosma
 npm install
 ```
 
-### ২. Supabase Setup
+### २. Supabase Setup
 
 1. [supabase.com](https://supabase.com) এ যান → New Project তৈরি করুন
 2. **SQL Editor** খুলুন → `supabase/migrations/001_initial.sql` ফাইলের সম্পূর্ণ কোড পেস্ট করুন → Run করুন
@@ -25,7 +24,7 @@ npm install
    - `anon public` key
    - `service_role` key (secret)
 
-### ৩. Environment Variables
+### ३. Environment Variables
 
 `.env.example` কপি করে `.env.local` তৈরি করুন:
 ```bash
@@ -40,7 +39,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-### ৪. Local এ চালান
+### ४. Local এ চালান
 ```bash
 npm run dev
 ```
@@ -84,22 +83,28 @@ chosma/
 │   │   └── page.tsx        # Order tracking by phone
 │   ├── contact/
 │   │   └── page.tsx        # Contact page
+│   ├── auth/               # Authentication pages
+│   ├── account/            # User account pages
+│   ├── admin/              # Admin dashboard
 │   └── api/
 │       ├── orders/route.ts # POST (place order) + GET (track)
-│       └── products/route.ts
+│       ├── products/route.ts
+│       └── admin/          # Admin API routes
 ├── components/
 │   ├── layout/
 │   │   ├── Header.tsx      # Sticky header + nav + cart button
 │   │   ├── Footer.tsx
 │   │   └── Ticker.tsx      # Scrolling promo bar
-│   └── shop/
-│       ├── CartProvider.tsx # Global cart state (React Context)
-│       ├── CartDrawer.tsx   # Slide-in cart
-│       ├── HeroBanner.tsx   # Auto-sliding hero
-│       ├── CategoryGrid.tsx
-│       ├── ProductGrid.tsx  # Product cards with Add to Cart
-│       ├── PromoBanners.tsx
-│       └── FeatureStrip.tsx
+│   ├── shop/
+│   │   ├── CartProvider.tsx # Global cart state (React Context)
+│   │   ├── CartDrawer.tsx   # Slide-in cart
+│   │   ├── HeroBanner.tsx   # Auto-sliding hero
+│   │   ├── CategoryGrid.tsx
+│   │   ├── ProductGrid.tsx  # Product cards with Add to Cart
+│   │   ├── PromoBanners.tsx
+│   │   └── FeatureStrip.tsx
+│   ├── admin/              # Admin components
+│   └── account/            # User account components
 ├── lib/
 │   ├── types.ts            # TypeScript interfaces
 │   └── supabase/
@@ -181,6 +186,3 @@ VALUES ('Product Name', 'পণ্যের নাম', 'unique-slug', 'sunglass
 ## 📞 Support
 
 কোনো সমস্যায়: info@chosma.com
-=======
-# chosma
->>>>>>> 95e4706f0f9d9eedb643db867c71427342aeb905
