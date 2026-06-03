@@ -23,10 +23,9 @@ export async function middleware(req: NextRequest) {
     }
   )
 
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user } } = await supabase.auth.getUser()
   const path = req.nextUrl.pathname
 
-  // Admin protection
   const adminToken = req.cookies.get('admin_token')?.value
   if (path.startsWith('/admin') && path !== '/admin/login' && !adminToken) {
     return NextResponse.redirect(new URL('/admin/login', req.url))
@@ -35,8 +34,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/admin', req.url))
   }
 
-  // Account protection - session না থাকলে login এ পাঠাও
-  if (path.startsWith('/account') && !session) {
+  // \u09af\u09a6\u09bf user login \u09a5\u09be\u0995\u09c7 \u098f\u09ac\u0982 /auth/login \u09ac\u09be /auth/signup \u098f \u09af\u09be\u09df, \u09a4\u09be\u09b9\u09b2\u09c7 /account \u098f \u09aa\u09be\u09a0\u09be\u0993
+  if ((path === '/auth/login' || path === '/auth/signup') && user) {
+    return NextResponse.redirect(new URL('/account', req.url))
+  }
+
+  // \u09af\u09a6\u09bf user login \u09a8\u09be \u09a5\u09be\u0995\u09c7 \u098f\u09ac\u0982 /account \u09af\u09c7\u0995\u09cb\u0995\u09cb sub-page \u098f \u09af\u09be\u09df, \u09a4\u09be\u09b9\u09b2\u09c7 /auth/login \u098f \u09aa\u09be\u09a0\u09be\u0993
+  if (path.startsWith('/account') && !user) {
     return NextResponse.redirect(new URL('/auth/login', req.url))
   }
 
@@ -44,5 +48,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/account/:path*'],
+  matcher: ['/admin/:path*', '/account/:path*', '/auth/login', '/auth/signup'],
 }

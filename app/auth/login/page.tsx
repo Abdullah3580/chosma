@@ -1,29 +1,31 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
+  const router = useRouter()
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Login clicked:', form)
     setLoading(true)
     setError('')
     const supabase = createClient()
     const { data, error } = await supabase.auth.signInWithPassword(form)
-    console.log('Supabase result:', { data, error })
     if (error) {
       setError('ভুল ইমেইল বা পাসওয়ার্ড')
       setLoading(false)
     } else if (data.session) {
-      
-      window.location.href = '/account'
+      // Session সেট হওয়ার পর account এ যাও
+      await new Promise(resolve => setTimeout(resolve, 500))
+      router.push('/account')
+      router.refresh()
     } else {
-      setError('Login হয়নি, আবার চেষ্টা করুন')
+      setError('Login হয়েনি, আবার চেষ্টা করুন')
       setLoading(false)
     }
   }
