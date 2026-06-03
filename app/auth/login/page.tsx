@@ -10,15 +10,18 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('Login clicked:', form)
     setLoading(true)
     setError('')
     const supabase = createClient()
     const { data, error } = await supabase.auth.signInWithPassword(form)
+    console.log('Supabase result:', { data, error })
     if (error) {
       setError('ভুল ইমেইল বা পাসওয়ার্ড')
       setLoading(false)
     } else if (data.session) {
-      window.location.replace('/account')
+      
+      window.location.href = '/account'
     } else {
       setError('Login হয়নি, আবার চেষ্টা করুন')
       setLoading(false)

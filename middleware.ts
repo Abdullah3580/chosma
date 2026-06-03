@@ -16,14 +16,14 @@ export async function middleware(req: NextRequest) {
           cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value))
           res = NextResponse.next({ request: { headers: req.headers } })
           cookiesToSet.forEach(({ name, value, options }) =>
-            res.cookies.set(name, value, options)
+            res.cookies.set(name, value, options as never)
           )
         },
       },
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession()
   const path = req.nextUrl.pathname
 
   // Admin protection
@@ -35,8 +35,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/admin', req.url))
   }
 
-  // Account protection
-  if (path.startsWith('/account') && !user) {
+  // Account protection - session না থাকলে login এ পাঠাও
+  if (path.startsWith('/account') && !session) {
     return NextResponse.redirect(new URL('/auth/login', req.url))
   }
 
