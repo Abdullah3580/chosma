@@ -5,12 +5,19 @@ import { ProfileEditor } from '@/components/account/ProfileEditor'
 export default async function AccountPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
+  
+  // Wait a moment for session to be properly synced
+  if (!user) {
+    // Try one more time after brief delay
+    await new Promise(resolve => setTimeout(resolve, 100))
+    const { data: { user: retryUser } } = await supabase.auth.getUser()
+    if (!retryUser) redirect('/auth/login')
+  }
 
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', user.id)
+    .eq('id', user?.id || '')
     .single()
 
   return (

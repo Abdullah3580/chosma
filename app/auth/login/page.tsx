@@ -23,9 +23,9 @@ export default function LoginPage() {
       setError('ভুল ইমেইল বা পাসওয়ার্ড')
       setLoading(false)
     } else if (data?.session) {
-      console.log('Session found, pushing to /account')
-      // Don't use router.refresh() - it causes redirect loop
-      router.push('/account')
+      console.log('Session found, redirecting to /account')
+      // Use window.location to force full page reload with new session
+      window.location.href = '/account'
     } else {
       setError('Login হয়েনি, আবার চেষ্টা করুন')
       setLoading(false)
