@@ -18,16 +18,29 @@ export default function SignupPage() {
     setLoading(true)
     setError('')
     const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
-      options: { data: { full_name: form.full_name } },
+      options: { 
+        data: { full_name: form.full_name },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     })
     if (error) {
       setError(error.message === 'User already registered' ? 'এই ইমেইল দিয়ে আগেই অ্যাকাউন্ট আছে' : error.message)
       setLoading(false)
-    } else {
-      setSuccess(true)
+    } else if (data?.user) {
+      // Auto-login after signup - সরাসরি login করিয়ে দিচ্ছি
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      })
+      if (signInError) {
+        setSuccess(true) // বার্তা দেখান - email confirm করতে বলো
+      } else {
+        router.push('/account')
+        router.refresh()
+      }
     }
   }
 
@@ -35,9 +48,9 @@ export default function SignupPage() {
     <div className="min-h-screen bg-gradient-to-br from-sky-light to-brown-light flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 text-center">
         <div className="text-5xl mb-4">✅</div>
-        <h2 className="font-serif text-2xl font-bold text-gray-900 mb-2">অ্যাকাউন্ট তৈরি হয়েছে!</h2>
-        <p className="text-gray-500 text-sm mb-6">আপনার ইমেইলে একটি confirmation link পাঠানো হয়েছে। Link এ ক্লিক করে confirm করুন।</p>
-        <Link href="/auth/login" className="btn-primary">Login করুন →</Link>
+        <h2 className="font-serif text-2xl font-bold text-gray-900 mb-2">অ্যাকাউন্ট তৈরি সম্পন্ন!</h2>
+        <p className="text-gray-500 text-sm mb-6">আপনার অ্যাকাউন্ট তৈরি হয়েছে। আপনার ইমেইলে একটি verification link পাঠানো হয়েছে।</p>
+        <Link href="/auth/login" className="btn-primary">এখনই Login করুন →</Link>
       </div>
     </div>
   )
