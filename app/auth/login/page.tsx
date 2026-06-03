@@ -16,14 +16,16 @@ export default function LoginPage() {
     setError('')
     const supabase = createClient()
     const { data, error } = await supabase.auth.signInWithPassword(form)
+    
+    console.log('Login response:', { hasData: !!data, hasSession: !!data?.session, error })
+    
     if (error) {
       setError('ভুল ইমেইল বা পাসওয়ার্ড')
       setLoading(false)
-    } else if (data.session) {
-      // Session সেট হওয়ার পর account এ যাও
-      await new Promise(resolve => setTimeout(resolve, 500))
+    } else if (data?.session) {
+      console.log('Session found, pushing to /account')
+      // Don't use router.refresh() - it causes redirect loop
       router.push('/account')
-      router.refresh()
     } else {
       setError('Login হয়েনি, আবার চেষ্টা করুন')
       setLoading(false)
