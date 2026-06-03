@@ -6,24 +6,15 @@ export default async function AccountPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
-  // Wait a moment for session to be properly synced
   if (!user) {
-    // Try one more time after brief delay
-    await new Promise(resolve => setTimeout(resolve, 100))
-    const { data: { user: retryUser } } = await supabase.auth.getUser()
-    if (!retryUser) redirect('/auth/login')
+    redirect('/auth/login')
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user?.id || '')
-    .single()
-
+  // Don't fetch profile - just pass user for now
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <h1 className="font-serif text-2xl font-bold text-gray-900 mb-8">আমার প্রোফাইল</h1>
-      <ProfileEditor user={user} profile={profile} />
+      <ProfileEditor user={user} profile={null} />
     </div>
   )
 }
