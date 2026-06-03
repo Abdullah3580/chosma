@@ -15,19 +15,33 @@ export default function LoginPage() {
     setLoading(true)
     setError('')
     const supabase = createClient()
-    const { data, error } = await supabase.auth.signInWithPassword(form)
     
-    console.log('Login response:', { hasData: !!data, hasSession: !!data?.session, error })
-    
-    if (error) {
-      setError('ভুল ইমেইল বা পাসওয়ার্ড')
-      setLoading(false)
-    } else if (data?.session) {
-      console.log('Session found, redirecting to /account')
-      // Use window.location to force full page reload with new session
-      window.location.href = '/account'
-    } else {
-      setError('Login হয়েনি, আবার চেষ্টা করুন')
+    try {
+      // Try sign in with password
+      const { data, error } = await supabase.auth.signInWithPassword(form)
+      
+      console.log('Login attempt:', { 
+        success: !error, 
+        hasSession: !!data?.session,
+        error: error?.message 
+      })
+      
+      if (error) {
+        setError('ভুল ইমেইল বা পাসওয়ার্ড')
+        setLoading(false)
+      } else if (data?.session) {
+        // Wait to ensure session is stored
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
+        // Redirect to callback which will properly exchange the session
+        window.location.href = '/auth/callback?next=/account'
+      } else {
+        setError('Login হয়েনি, আবার চেষ্টা করুন')
+        setLoading(false)
+      }
+    } catch (err) {
+      console.error('Login error:', err)
+      setError('একটি ত্রুটি ঘটেছে')
       setLoading(false)
     }
   }
